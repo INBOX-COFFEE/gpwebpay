@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "gp_webpay"
+
+require "irb"
+IRB.start
