@@ -7,7 +7,7 @@ Started as [this fork](https://github.com/redrick/gp_webpay) of https://github.c
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'gp_webpay'
+gem 'gpwebpay'
 ```
 
 And then execute:
@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install gp_webpay
+    $ gem install gpwebpay
 
 ## Usage
 
@@ -24,7 +24,7 @@ Generate own certificate, put into your repository.
 
 ### Initialize
 
-config/initializers/gp_webpay.rb
+config/initializers/gpwebpay.rb
 
 ```ruby
 GpWebpay.configure do |config|
@@ -102,7 +102,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/gp_webpay/fork )
+1. Fork it ( https://github.com/[my-github-username]/gpwebpay/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

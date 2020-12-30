@@ -4,13 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'gp_webpay/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "gp_webpay"
+  spec.name          = "gpwebpay"
   spec.version       = GpWebpay::VERSION
-  spec.authors       = ["Martin Magnusek"]
-  spec.email         = ["magnusekm@gmail.com"]
+  spec.authors       = ["Andrej Antas"]
+  spec.email         = ["andrej@antas.cz"]
 
-  spec.summary       = %q{GP webpay, easy to implement payment gateway}
-  spec.homepage      = "https://github.com/blueberryapps/gp_webpay"
+  spec.summary       = %q{GP webpay, payments, SOAP, payment gateway}
+  spec.homepage      = "https://github.com/redrick/gpwebpay"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
