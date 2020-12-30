@@ -1,7 +1,3 @@
-class Payment
-  include GpWebpay::Payment
-end
-
 RSpec.describe GpWebpay::Payment do
   let(:payment) { Payment.new }
 

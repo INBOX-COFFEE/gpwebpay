@@ -1,5 +1,6 @@
 require "bundler/setup"
 require "gp_webpay"
+require "support/payment"
 
 require "support/vcr"
 require "pry"

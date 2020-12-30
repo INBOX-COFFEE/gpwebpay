@@ -11,3 +11,5 @@
 .ruby-version
 
 .ruby-gemset
+
+.rspec_status
