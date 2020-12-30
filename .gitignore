@@ -13,3 +13,5 @@
 .ruby-gemset
 
 .rspec_status
+
+/bin/test_console
