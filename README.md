@@ -1,5 +1,7 @@
 # GpWebpay
 
+Started as [this fork](https://github.com/redrick/gp_webpay) of https://github.com/blueberryapps/gp_webpay, Thanks for that one ;)
+
 ## Installation
 
 Add this line to your application's Gemfile:
