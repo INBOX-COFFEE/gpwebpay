@@ -1,9 +1,11 @@
-example_id                                           | status | run_time        |
----------------------------------------------------- | ------ | --------------- |
-./spec/lib/gp_webpay/config_spec.rb[1:1:1]           | passed | 0.00112 seconds |
-./spec/lib/gp_webpay/config_spec.rb[1:1:2]           | passed | 0.00041 seconds |
-./spec/lib/gp_webpay/config_spec.rb[1:2:1]           | passed | 0.00367 seconds |
-./spec/lib/gp_webpay/config_spec.rb[1:2:2]           | passed | 0.00019 seconds |
-./spec/lib/gp_webpay/payment_attributes_spec.rb[1:1] | passed | 0.0001 seconds  |
-./spec/lib/gp_webpay/payment_attributes_spec.rb[1:2] | passed | 0.0002 seconds  |
-./spec/lib/gp_webpay/payment_spec.rb[1:1]            | passed | 0.00067 seconds |
+example_id                                                | status | run_time        |
+--------------------------------------------------------- | ------ | --------------- |
+./spec/lib/gp_webpay/config_spec.rb[1:1:1]                | passed | 0.0014 seconds  |
+./spec/lib/gp_webpay/config_spec.rb[1:1:2]                | passed | 0.00052 seconds |
+./spec/lib/gp_webpay/config_spec.rb[1:2:1]                | passed | 0.00793 seconds |
+./spec/lib/gp_webpay/config_spec.rb[1:2:2]                | passed | 0.00061 seconds |
+./spec/lib/gp_webpay/payment_attributes_spec.rb[1:1]      | passed | 0.00028 seconds |
+./spec/lib/gp_webpay/payment_attributes_spec.rb[1:2]      | passed | 0.00057 seconds |
+./spec/lib/gp_webpay/payment_spec.rb[1:1]                 | passed | 0.00252 seconds |
+./spec/lib/gp_webpay/web_services/template_spec.rb[1:1:1] | passed | 0.0157 seconds  |
+./spec/lib/gp_webpay/web_services_spec.rb[1:1:1]          | passed | 0.01235 seconds |

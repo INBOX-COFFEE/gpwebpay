@@ -1,9 +1,11 @@
 require "bundler/setup"
 require "gp_webpay"
-require "support/payment"
-
-require "support/vcr"
 require "pry"
+require "wasabi"
+
+require "support/payment"
+require "support/vcr"
+require "support/wsdl_validator"
 
 require "webmock/rspec"
 WebMock.disable_net_connect!(allow_localhost: true)
