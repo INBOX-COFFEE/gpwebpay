@@ -184,6 +184,41 @@ module GpWebpay
           }
         end.to_xml
       end
+
+      ##
+      # <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://gpe.cz/pay/pay-ws/proc/v1" xmlns:type="http://gpe.cz/pay/pay-ws/proc/v1/type">
+      #   <soapenv:Header/>
+      #   <soapenv:Body>
+      # 		<v1:getMasterPaymentStatus>
+      # 			 <v1:masterPaymentStatusRequest>
+      # 					<type:messageId>?</type:messageId>
+      # 					<type:provider>?</type:provider>
+      # 					<type:merchantNumber>?</type:merchantNumber>
+      # 					<type:paymentNumber>?</type:paymentNumber>
+      # 					<type:signature>cid:300161986033</type:signature>
+      # 			 </v1:masterPaymentStatusRequest>
+      # 		</v1:getMasterPaymentStatus>
+      #  </soapenv:Body>
+      # </soapenv:Envelope>
+      ##
+      def get_master_payment_status(attributes = {})
+        ::Nokogiri::XML::Builder.new(:encoding => "utf-8") do |xml|
+          xml.send("soapenv:Envelope", "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/", "xmlns:v1" => "http://gpe.cz/pay/pay-ws/proc/v1", "xmlns:type" => "http://gpe.cz/pay/pay-ws/proc/v1/type") {
+            xml.send("soapenv:Header")
+            xml.send("soapenv:Body") {
+              xml.send("v1:getMasterPaymentStatus") {
+                xml.send("v1:masterPaymentStatusRequest") {
+                  xml.send("type:messageId", attributes[:message_id])
+                  xml.send("type:provider", "0100")
+                  xml.send("type:merchantNumber", attributes[:merchant_number])
+                  xml.send("type:paymentNumber", attributes[:order_number])
+                  xml.send("type:signature", attributes[:digest])
+                }
+              }
+            }
+          }
+        end.to_xml
+      end
     end
   end
 end
