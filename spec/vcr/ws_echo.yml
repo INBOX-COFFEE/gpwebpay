@@ -28,4 +28,33 @@ http_interactions:
         xmlns:ns3="http://gpe.cz/gpwebpay/additionalInfo/response"></ns2:echoResponse></soapenv:Body></soapenv:Envelope>
     http_version: 
   recorded_at: Thu, 31 Dec 2020 13:08:40 GMT
+- request:
+    method: post
+    uri: https://test.3dsecure.gpwebpay.com/pay-ws/v1/PaymentService
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="utf-8"?>
+        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://gpe.cz/pay/pay-ws/proc/v1">
+          <soapenv:Header/>
+          <soapenv:Body>
+            <v1:echo/>
+          </soapenv:Body>
+        </soapenv:Envelope>
+    headers: {}
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/xml; charset=UTF-8
+    body:
+      encoding: UTF-8
+      string: <?xml version="1.0" encoding="UTF-8"?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns4:echoResponse
+        xmlns:ns4="http://gpe.cz/pay/pay-ws/proc/v1" xmlns="http://gpe.cz/gpwebpay/additionalInfo/response"
+        xmlns:ns5="http://gpe.cz/gpwebpay/additionalInfo/response/v1" xmlns:ns2="http://gpe.cz/pay/pay-ws/core/type"
+        xmlns:ns3="http://gpe.cz/pay/pay-ws/proc/v1/type"></ns4:echoResponse></soapenv:Body></soapenv:Envelope>
+    http_version: 
+  recorded_at: Mon, 22 Feb 2021 23:33:05 GMT
 recorded_with: VCR 3.0.3

@@ -34,4 +34,12 @@ RSpec.describe GpWebpay::WebServices::Template do
       expect(wsdl.errors_for(request)).to be_empty
     end
   end
+
+  describe "get_master_payment_status" do
+    it "builds correct XML request" do
+      wsdl = Wsdl::Validator.new
+      request = template.get_master_payment_status(payment_attributes.to_h)
+      expect(wsdl.errors_for(request)).to be_empty
+    end
+  end
 end

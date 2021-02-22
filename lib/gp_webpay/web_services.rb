@@ -27,27 +27,27 @@ module GpWebpay
       get_params_from(send_request(template.echo).body_str)
     end
 
-    def ws_process_recurring_payment
-      attributes = request_attributes("recurring")
-      raw_response = send_request(template.process_recurring_payment(attributes)).body_str
-      get_params_from(raw_response)
-    end
-
     def ws_process_regular_subscription_payment
       attributes = request_attributes("regular_subscription")
       raw_response = send_request(template.process_regular_subscription_payment(attributes)).body_str
       get_params_from(raw_response)
     end
 
-    def ws_get_order_detail
+    def ws_get_payment_detail
       attributes = request_attributes("detail")
-      raw_response = send_request(template.get_order_detail(attributes)).body_str
+      raw_response = send_request(template.get_payment_detail(attributes)).body_str
       get_params_from(raw_response)
     end
 
-    def ws_get_order_state
+    def ws_get_payment_status
       attributes = request_attributes("state")
-      raw_response = send_request(template.get_order_state(attributes)).body_str
+      raw_response = send_request(template.get_payment_status(attributes)).body_str
+      get_params_from(raw_response)
+    end
+
+    def ws_get_master_payment_status
+      attributes = request_attributes("state")
+      raw_response = send_request(template.get_master_payment_status(attributes)).body_str
       get_params_from(raw_response)
     end
 
@@ -62,6 +62,7 @@ module GpWebpay
     private
 
     def get_params_from(response)
+      puts response
       hash_response = Hash.from_xml(Nokogiri::XML(response).to_s)["Envelope"]["Body"]
       first_lvl_key = hash_response.keys.first
       hash_response = hash_response["#{first_lvl_key}"]

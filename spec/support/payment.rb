@@ -7,7 +7,7 @@ class Payment
   end
 
   def order_number
-    1001
+    00100607
   end
 
   def payment_type
