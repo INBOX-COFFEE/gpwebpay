@@ -3,7 +3,10 @@ require "gp_webpay"
 require "pry"
 require "wasabi"
 
-require "support/payment"
+require "support/payments/base"
+require "support/payments/default"
+require "support/payments/master"
+require "support/payments/recurring"
 require "support/vcr"
 require "support/wsdl_validator"
 

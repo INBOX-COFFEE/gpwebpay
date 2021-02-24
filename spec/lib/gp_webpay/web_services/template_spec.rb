@@ -1,6 +1,6 @@
 RSpec.describe GpWebpay::WebServices::Template do
   let(:template) { GpWebpay::WebServices::Template.new }
-  let(:payment) { Payment.new }
+  let(:payment) { Payments::Default.new } # actually not correct - take into account type
   let(:payment_attributes) { GpWebpay::PaymentAttributes.new(payment) }
 
   describe "echo" do

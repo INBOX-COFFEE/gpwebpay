@@ -1,5 +1,5 @@
 RSpec.describe GpWebpay::WebServices do
-  let(:payment) { Payment.new }
+  let(:payment) { Payments::Default.new }
 
   describe "ws_echo" do
     it "builds correct XML request" do

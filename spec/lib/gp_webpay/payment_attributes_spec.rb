@@ -1,5 +1,5 @@
 RSpec.describe GpWebpay::PaymentAttributes do
-  let(:payment) { Payment.new }
+  let(:payment) { Payments::Default.new }
   let(:payment_attributes) { GpWebpay::PaymentAttributes.new(payment) }
 
   it "build correct hash with all attributes" do

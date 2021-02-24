@@ -1,5 +1,5 @@
 RSpec.describe GpWebpay::Payment do
-  let(:payment) { Payment.new }
+  let(:payment) { Payments::Default.new }
 
   it "have all public methods" do
     expect(payment).to respond_to(:pay_url)
