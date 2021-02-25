@@ -1,28 +1,14 @@
 module GpWebpay
   class PaymentAttributes
-    KEYS = %w(MERCHANTNUMBER OPERATION ORDERNUMBER AMOUNT CURRENCY DEPOSITFLAG URL DESCRIPTION MD USERPARAM1)
+    KEYS = %i(merchant_number operation order_number amount_in_cents currency deposit_flag redirect_url description merchant_description user_param)
 
-    WS_KEYS = %w(MESSAGEID BANKID MERCHANTNUMBER ORDERNUMBER)
+    WS_KEYS = %i(message_id bank_id merchant_number order_number)
 
-    REGULAR_PAYMENT_KEYS = %w(MESSAGEID BANKID MERCHANTNUMBER ORDERNUMBER MASTERORDERNUMBER MERORDERNUM AMOUNT CURRENCY)
+    REGULAR_PAYMENT_KEYS = %i(message_id bank_id merchant_number order_number master_order_number merchant_order_number amount_in_cents currency)
 
-    OPTIONAL_KEYS = %w(MERORDERNUM DESCRIPTION MD)
+    OPTIONAL_KEYS = %i(merchant_order_number description merchant_description)
 
-    MASTER_KEYS = %w(USERPARAM1)
-
-    TRANSITIONS = {
-      "MERCHANTNUMBER" => :merchant_number,
-      "ORDERNUMBER" => :order_number,
-      "MASTERORDERNUMBER" => :master_order_number,
-      "AMOUNT" => :amount_in_cents,
-      "DEPOSITFLAG" => :deposit_flag,
-      "MERORDERNUM" => :merchant_order_number,
-      "URL" => :redirect_url,
-      "MD" => :merchant_description,
-      "USERPARAM1" => :user_param,
-      "MESSAGEID" => :message_id,
-      "BANKID" => :bank_id,
-    }
+    MASTER_KEYS = %i(user_param)
 
     def initialize(payment, ws_flag = false, type = "")
       @payment = payment
@@ -49,16 +35,14 @@ module GpWebpay
     end
 
     def to_h
-      keys.each_with_object({}) do |key, hash|
-        method = TRANSITIONS[key] || key.downcase.to_sym
-
+      keys.each_with_object({}) do |method, hash|
         if @payment.respond_to?(method)
-          if method == TRANSITIONS["MESSAGEID"]
-            hash[key] = @payment.public_send(method, @type)
+          if method == :message_id
+            hash[method] = @payment.public_send(method, @type)
           else
-            hash[key] = @payment.public_send(method)
+            hash[method] = @payment.public_send(method)
           end
-        elsif !OPTIONAL_KEYS.include?(key)
+        elsif !OPTIONAL_KEYS.include?(method)
           method_missing(method)
         end
 
