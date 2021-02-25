@@ -27,15 +27,15 @@ module Payments
       OpenStruct.new(
         name: "Jon Doe",
         email: "email@example.com",
-        phone_country: "CZ",
+        phone_country: 420,
         phone: "777111222",
-        mobile_phone_country: "CZ",
+        mobile_phone_country: 420,
         mobile_phone: "555333222",
       )
     end
 
     def address_match
-      true
+      "Y"
     end
 
     def shipping
@@ -44,7 +44,7 @@ module Payments
         address1: "Made Up 10",
         city: "NonExistent",
         postal_code: "11111",
-        country: "CZ",
+        country: 203,
       )
     end
 

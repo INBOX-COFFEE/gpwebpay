@@ -73,8 +73,8 @@ module GpWebpay
           xml.send("soapenv:Envelope", "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/", "xmlns:v1" => "http://gpe.cz/pay/pay-ws/proc/v1", "xmlns:type" => "http://gpe.cz/pay/pay-ws/proc/v1/type") {
             xml.send("soapenv:Header")
             xml.send("soapenv:Body") {
-              xml.send("v1:processRecurringPayment") {
-                xml.send("v1:recurringPaymentRequest") {
+              xml.send("v1:processRegularSubscriptionPayment") {
+                xml.send("v1:regularSubscriptionPaymentRequest") {
                   xml.send("type:messageId", attributes[:message_id])
                   xml.send("type:provider", "0100")
                   xml.send("type:merchantNumber", attributes[:merchant_number])
@@ -82,6 +82,7 @@ module GpWebpay
                   xml.send("type:masterPaymentNumber", attributes[:master_order_number])
                   xml.send("type:orderNumber", attributes[:merchant_order_number])
                   xml.send("type:subscriptionAmount", attributes[:amount])
+                  xml.send("type:captureFlag", attributes[:capture_flag])
                   xml.send("type:cardHolderData") {
                     xml.send("type:cardholderDetails") {
                       xml.send("type:name", attributes[:card_holder_name])

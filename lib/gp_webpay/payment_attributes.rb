@@ -4,8 +4,6 @@ module GpWebpay
 
     WS_KEYS = %w(MESSAGEID BANKID MERCHANTNUMBER ORDERNUMBER)
 
-    RECCURING_KEYS = %w(MESSAGEID BANKID MERCHANTNUMBER ORDERNUMBER MASTERORDERNUMBER MERORDERNUM AMOUNT CURRENCY)
-
     REGULAR_PAYMENT_KEYS = %w(MESSAGEID BANKID MERCHANTNUMBER ORDERNUMBER MASTERORDERNUMBER MERORDERNUM AMOUNT CURRENCY)
 
     OPTIONAL_KEYS = %w(MERORDERNUM DESCRIPTION MD)
@@ -35,21 +33,15 @@ module GpWebpay
     def keys
       case @payment.payment_type
       when "master"
-        if @ws_flag
-          return WS_KEYS
-        else
-          return KEYS
-        end
+        return (@ws_flag ? WS_KEYS : KEYS)
       when "recurring"
         case @type
-        when "detail", "state"
-          return WS_KEYS
-        when "recurring"
-          return RECCURING_KEYS
-        when "regular_subscription"
+        when "processRegularSubscriptionPayment"
+          puts @payment.payment_type
+          puts @type
           return REGULAR_PAYMENT_KEYS
         else
-          return WS_KEYS # TBD
+          return WS_KEYS
         end
       else
         return KEYS.reject { |k| MASTER_KEYS.include?(k) }
@@ -61,7 +53,11 @@ module GpWebpay
         method = TRANSITIONS[key] || key.downcase.to_sym
 
         if @payment.respond_to?(method)
-          hash[key] = @payment.public_send(method)
+          if method == TRANSITIONS["MESSAGEID"]
+            hash[key] = @payment.public_send(method, @type)
+          else
+            hash[key] = @payment.public_send(method)
+          end
         elsif !OPTIONAL_KEYS.include?(key)
           method_missing(method)
         end
