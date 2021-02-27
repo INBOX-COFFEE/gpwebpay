@@ -4,7 +4,13 @@ module GpWebpay
 
     WS_KEYS = %i(message_id bank_id merchant_number order_number)
 
-    REGULAR_PAYMENT_KEYS = %i(message_id bank_id merchant_number order_number master_order_number merchant_order_number amount_in_cents currency)
+    REGULAR_PAYMENT_KEYS = %i(
+      message_id bank_id merchant_number order_number master_order_number merchant_order_number amount_in_cents capture_flag
+      card_holder.name card_holder.email card_holder.phone_country card_holder.phone card_holder.mobile_phone_country card_holder.mobile_phone
+      address_match
+      billing.name billing.address1 billing.city billing.postal_code billing.country
+      shipping.name shipping.address1 shipping.city shipping.postal_code shipping.country
+    )
 
     OPTIONAL_KEYS = %i(merchant_order_number description merchant_description)
 
@@ -23,8 +29,6 @@ module GpWebpay
       when "recurring"
         case @type
         when "processRegularSubscriptionPayment"
-          puts @payment.payment_type
-          puts @type
           return REGULAR_PAYMENT_KEYS
         else
           return WS_KEYS
@@ -36,11 +40,12 @@ module GpWebpay
 
     def to_h
       keys.each_with_object({}) do |method, hash|
-        if @payment.respond_to?(method)
+        method_chain = method.to_s.split(".").map(&:to_sym)
+        if @payment.respond_to?(*method_chain)
           if method == :message_id
             hash[method] = @payment.public_send(method, @type)
           else
-            hash[method] = @payment.public_send(method)
+            hash[method] = method_chain.inject(@payment, :public_send)
           end
         elsif !OPTIONAL_KEYS.include?(method)
           method_missing(method)
