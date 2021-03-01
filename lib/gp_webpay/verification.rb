@@ -1,4 +1,3 @@
-Resolving dependencies...
 require "openssl"
 
 module GpWebpay

@@ -1,4 +1,3 @@
-Resolving dependencies...
 require "nokogiri"
 require "curb"
 require "active_support/core_ext/hash"
@@ -53,7 +52,7 @@ module GpWebpay
     end
 
     def message_id(type = "")
-      "#{order_number}0100#{config.merchant_number}#{type}#{Time.now.to_i}"
+      "#{order_number}0100#{config.merchant_number}#{type}#{Time.now.utc.to_i}"
     end
 
     def bank_id
