@@ -1,3 +1,4 @@
+Resolving dependencies...
 require "nokogiri"
 require "curb"
 require "active_support/core_ext/hash"
@@ -11,7 +12,6 @@ module GpWebpay
     def send_request(request_xml)
       request = Curl::Easy.new(config.web_services_url)
       request.headers["Content-Type"] = "text/xml;charset=UTF-8"
-      puts request_xml
       request.http_post(request_xml)
       request
     end
@@ -67,7 +67,6 @@ module GpWebpay
     private
 
     def get_params_from(response)
-      puts response
       hash_response = Hash.from_xml(Nokogiri::XML(response).to_s)["Envelope"]["Body"]
       first_lvl_key = hash_response.keys.first
       hash_response = hash_response["#{first_lvl_key}"]

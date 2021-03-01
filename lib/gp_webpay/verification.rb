@@ -1,3 +1,4 @@
+Resolving dependencies...
 require "openssl"
 
 module GpWebpay
@@ -17,7 +18,6 @@ module GpWebpay
     end
 
     def digest
-      puts digest_text
       sign = merchant_key.sign(OpenSSL::Digest::SHA1.new, digest_text)
       Base64.encode64(sign).gsub("\n", "")
     end
