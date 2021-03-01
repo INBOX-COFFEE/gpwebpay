@@ -31,4 +31,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'wasabi'
   spec.add_development_dependency 'libxml-ruby'
+  spec.add_development_dependency 'timecop'
 end

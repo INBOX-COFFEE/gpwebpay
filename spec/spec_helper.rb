@@ -2,6 +2,7 @@ require "bundler/setup"
 require "gp_webpay"
 require "pry"
 require "wasabi"
+require "timecop"
 
 require "support/payments/base"
 require "support/payments/default"
