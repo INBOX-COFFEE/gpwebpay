@@ -1,7 +1,10 @@
-sudo: false
 language: ruby
+dist: xenial
+os: linux
 rvm:
   - 2.4.3
   - 2.6.2
   - 3.0.0
-before_install: gem install bundler
+before_install:
+  - export TZ=Europe/Prague
+  - gem install bundler
