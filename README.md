@@ -1,5 +1,7 @@
 # GpWebpay
 
+[![Build Status](https://travis-ci.org/redrick/gpwebpay.svg?branch=master)](https://travis-ci.org/redrick/gpwebpay)
+
 Started as [this fork](https://github.com/redrick/gp_webpay) of https://github.com/blueberryapps/gp_webpay, Thanks for that one ;)
 
 ## Installation

@@ -27,36 +27,40 @@ module GpWebpay
       get_params_from(send_request(template.echo).body_str)
     end
 
-    def ws_process_recurring_payment
-      attributes = request_attributes("recurring")
-      raw_response = send_request(template.process_recurring_payment(attributes)).body_str
-      get_params_from(raw_response)
-    end
-
     def ws_process_regular_subscription_payment
-      attributes = request_attributes("regular_subscription")
+      attributes = request_attributes("processRegularSubscriptionPayment")
       raw_response = send_request(template.process_regular_subscription_payment(attributes)).body_str
       get_params_from(raw_response)
     end
 
-    def ws_get_order_detail
-      attributes = request_attributes("detail")
-      raw_response = send_request(template.get_order_detail(attributes)).body_str
+    def ws_get_payment_detail
+      attributes = request_attributes("getPaymentDetail")
+      raw_response = send_request(template.get_payment_detail(attributes)).body_str
       get_params_from(raw_response)
     end
 
-    def ws_get_order_state
-      attributes = request_attributes("state")
-      raw_response = send_request(template.get_order_state(attributes)).body_str
+    def ws_get_payment_status
+      attributes = request_attributes("getPaymentStatus")
+      raw_response = send_request(template.get_payment_status(attributes)).body_str
       get_params_from(raw_response)
     end
 
-    def message_id
-      "#{order_number}0100#{config.merchant_number}"
+    def ws_get_master_payment_status
+      attributes = request_attributes("getMasterPaymentStatus")
+      raw_response = send_request(template.get_master_payment_status(attributes)).body_str
+      get_params_from(raw_response)
+    end
+
+    def message_id(type = "")
+      "#{order_number}0100#{config.merchant_number}#{type}#{Time.now.to_i}"
     end
 
     def bank_id
       "0100"
+    end
+
+    def capture_flag
+      1
     end
 
     private
@@ -72,12 +76,13 @@ module GpWebpay
 
     def request_attributes(type = "")
       {
-        message_id: message_id,
+        message_id: message_id(type),
         merchant_number: config.merchant_number,
         order_number: order_number,
         merchant_order_number: merchant_order_number,
         master_order_number: master_order_number,
         amount: amount_in_cents,
+        capture_flag: capture_flag,
         card_holder_name: card_holder.name,
         card_holder_email: card_holder.email,
         card_holder_phone_country: card_holder.phone_country,

@@ -7,61 +7,16 @@ module GpWebpay
       # <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:core="http://gpe.cz/pay/pay-ws/core">
       #   <soapenv:Header/>
       #   <soapenv:Body>
-      #     <core:echo/>
+      #     <v1:echo/>
       #   </soapenv:Body>
       # </soapenv:Envelope>
       ##
       def echo
-        xml = ::Nokogiri::XML::Builder.new(:encoding => "utf-8") do |xml|
-          xml.send("soapenv:Envelope", "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/", "xmlns:core" => "http://gpe.cz/pay/pay-ws/core") {
+        ::Nokogiri::XML::Builder.new(:encoding => "utf-8") do |xml|
+          xml.send("soapenv:Envelope", "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/", "xmlns:v1" => "http://gpe.cz/pay/pay-ws/proc/v1") {
             xml.send("soapenv:Header")
             xml.send("soapenv:Body") {
-              xml.send("core:echo")
-            }
-          }
-        end.to_xml
-      end
-
-      ##
-      # <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:core="http://gpe.cz/pay/pay-ws/core" xmlns:type="http://gpe.cz/pay/pay-ws/core/type">
-      #   <soapenv:Header/>
-      #   <soapenv:Body>
-      #     <core:processRecurringPayment>
-      #       <core:recurringPaymentRequest>
-      #         <type:messageId>A111111111111111</type:messageId>
-      #         <type:acquirer>0100</type:acquirer>  // use 0100 for KB
-      #         <type:merchantNumber>9999999022</type:merchantNumber> // stored in configuration
-      #         <type:orderNumber>2</type:orderNumber> // unique order number for merchant
-      #         <type:masterOrderNumber>1</type:masterOrderNumber>
-      #         <type:merchantOrderNumber>2</type:merchantOrderNumber>
-      #         <!--Optional:-->
-      #         <type:amount>80</type:amount>
-      #         <!--Optional:-->
-      #         <type:currencyCode>203</type:currencyCode>
-      #         <type:signature>KGU4751QSU12 ... </type:signature>
-      #       </core:recurringPaymentRequest>
-      #     </core:processRecurringPayment>
-      #   </soapenv:Body>
-      # </soapenv:Envelope>
-      ##
-      def process_recurring_payment(attributes = {})
-        xml = ::Nokogiri::XML::Builder.new(:encoding => "utf-8") do |xml|
-          xml.send("soapenv:Envelope", "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/", "xmlns:core" => "http://gpe.cz/pay/pay-ws/core", "xmlns:type" => "http://gpe.cz/pay/pay-ws/core/type") {
-            xml.send("soapenv:Header")
-            xml.send("soapenv:Body") {
-              xml.send("core:processRecurringPayment") {
-                xml.send("core:recurringPaymentRequest") {
-                  xml.send("type:messageId", attributes[:message_id])
-                  xml.send("type:acquirer", "0100")
-                  xml.send("type:merchantNumber", attributes[:merchant_number])
-                  xml.send("type:orderNumber", attributes[:order_number])
-                  xml.send("type:masterOrderNumber", attributes[:master_order_number])
-                  xml.send("type:merchantOrderNumber", attributes[:merchant_order_number])
-                  xml.send("type:amount", attributes[:amount])
-                  xml.send("type:currencyCode", attributes[:currency])
-                  xml.send("type:signature", attributes[:digest])
-                }
-              }
+              xml.send("v1:echo")
             }
           }
         end.to_xml
@@ -115,11 +70,11 @@ module GpWebpay
       ##
       def process_regular_subscription_payment(attributes = {})
         ::Nokogiri::XML::Builder.new(:encoding => "utf-8") do |xml|
-          xml.send("soapenv:Envelope", "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/", "xmlns:core" => "http://gpe.cz/pay/pay-ws/core", "xmlns:type" => "http://gpe.cz/pay/pay-ws/core/type") {
+          xml.send("soapenv:Envelope", "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/", "xmlns:v1" => "http://gpe.cz/pay/pay-ws/proc/v1", "xmlns:type" => "http://gpe.cz/pay/pay-ws/proc/v1/type") {
             xml.send("soapenv:Header")
             xml.send("soapenv:Body") {
-              xml.send("core:processRecurringPayment") {
-                xml.send("core:recurringPaymentRequest") {
+              xml.send("v1:processRegularSubscriptionPayment") {
+                xml.send("v1:regularSubscriptionPaymentRequest") {
                   xml.send("type:messageId", attributes[:message_id])
                   xml.send("type:provider", "0100")
                   xml.send("type:merchantNumber", attributes[:merchant_number])
@@ -127,6 +82,7 @@ module GpWebpay
                   xml.send("type:masterPaymentNumber", attributes[:master_order_number])
                   xml.send("type:orderNumber", attributes[:merchant_order_number])
                   xml.send("type:subscriptionAmount", attributes[:amount])
+                  xml.send("type:captureFlag", attributes[:capture_flag])
                   xml.send("type:cardHolderData") {
                     xml.send("type:cardholderDetails") {
                       xml.send("type:name", attributes[:card_holder_name])
@@ -161,32 +117,32 @@ module GpWebpay
       end
 
       ##
-      # <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:core="http://gpe.cz/pay/pay-ws/core" xmlns:type="http://gpe.cz/pay/pay-ws/core/type">
-      #   <soapenv:Header/>
-      #   <soapenv:Body>
-      #     <core:getOrderDetail>
-      #       <core:orderDetailRequest>
-      #         <type:messageId>A111111111111111</type:messageId>
-      #         <type:acquirer>0100</type:acquirer>
-      #         <type:merchantNumber>9999999022</type:merchantNumber>
-      #         <type:orderNumber>1</type:orderNumber>
-      #         <type:signature>KGU4751QSU12 ... </type:signature>
-      #       </core:orderDetailRequest>
-      #     </core:getOrderDetail>
-      #   </soapenv:Body>
+      # <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://gpe.cz/pay/pay-ws/proc/v1" xmlns:type="http://gpe.cz/pay/pay-ws/proc/v1/type">
+      #    <soapenv:Header/>
+      #    <soapenv:Body>
+      #       <v1:getPaymentDetail>
+      #          <v1:paymentDetailRequest>
+      #             <type:messageId>?</type:messageId>
+      #             <type:provider>?</type:provider>
+      #             <type:merchantNumber>?</type:merchantNumber>
+      #             <type:paymentNumber>?</type:paymentNumber>
+      #             <type:signature>cid:1203306453242</type:signature>
+      #          </v1:paymentDetailRequest>
+      #       </v1:getPaymentDetail>
+      #    </soapenv:Body>
       # </soapenv:Envelope>
       ##
-      def get_order_detail(attributes = {})
-        xml = ::Nokogiri::XML::Builder.new(:encoding => "utf-8") do |xml|
-          xml.send("soapenv:Envelope", "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/", "xmlns:core" => "http://gpe.cz/pay/pay-ws/core", "xmlns:type" => "http://gpe.cz/pay/pay-ws/core/type") {
+      def get_payment_detail(attributes = {})
+        ::Nokogiri::XML::Builder.new(:encoding => "utf-8") do |xml|
+          xml.send("soapenv:Envelope", "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/", "xmlns:v1" => "http://gpe.cz/pay/pay-ws/proc/v1", "xmlns:type" => "http://gpe.cz/pay/pay-ws/proc/v1/type") {
             xml.send("soapenv:Header")
             xml.send("soapenv:Body") {
-              xml.send("core:getOrderDetail") {
-                xml.send("core:orderDetailRequest") {
+              xml.send("v1:getPaymentDetail") {
+                xml.send("v1:paymentDetailRequest") {
                   xml.send("type:messageId", attributes[:message_id])
-                  xml.send("type:acquirer", "0100")
+                  xml.send("type:provider", "0100")
                   xml.send("type:merchantNumber", attributes[:merchant_number])
-                  xml.send("type:orderNumber", attributes[:order_number])
+                  xml.send("type:paymentNumber", attributes[:order_number])
                   xml.send("type:signature", attributes[:digest])
                 }
               }
@@ -196,32 +152,67 @@ module GpWebpay
       end
 
       ##
-      # <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:core="http://gpe.cz/pay/pay-ws/core" xmlns:type="http://gpe.cz/pay/pay-ws/core/type">
-      #   <soapenv:Header/>
-      #   <soapenv:Body>
-      #     <core:getOrderState>
-      #       <core:orderStateRequest>
-      #         <type:messageId>A111111111111111</type:messageId>
-      #         <type:acquirer>0100</type:acquirer>
-      #         <type:merchantNumber>9999999022</type:merchantNumber>
-      #         <type:orderNumber>1</type:orderNumber>
-      #         <type:signature>KGU4751QSU12 ... </type:signature>
-      #       </core:orderStateRequest>
-      #     </core:getOrderState>
-      #   </soapenv:Body>
+      # <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://gpe.cz/pay/pay-ws/proc/v1" xmlns:type="http://gpe.cz/pay/pay-ws/proc/v1/type">
+      #    <soapenv:Header/>
+      #    <soapenv:Body>
+      #       <v1:getPaymentStatus>
+      #          <v1:paymentStatusRequest>
+      #             <type:messageId>?</type:messageId>
+      #             <type:provider>?</type:provider>
+      #             <type:merchantNumber>?</type:merchantNumber>
+      #             <type:paymentNumber>?</type:paymentNumber>
+      #             <type:signature>cid:619237523074</type:signature>
+      #          </v1:paymentStatusRequest>
+      #       </v1:getPaymentStatus>
+      #    </soapenv:Body>
       # </soapenv:Envelope>
       ##
-      def get_order_state(attributes = {})
-        xml = ::Nokogiri::XML::Builder.new(:encoding => "utf-8") do |xml|
-          xml.send("soapenv:Envelope", "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/", "xmlns:core" => "http://gpe.cz/pay/pay-ws/core", "xmlns:type" => "http://gpe.cz/pay/pay-ws/core/type") {
+      def get_payment_status(attributes = {})
+        ::Nokogiri::XML::Builder.new(:encoding => "utf-8") do |xml|
+          xml.send("soapenv:Envelope", "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/", "xmlns:v1" => "http://gpe.cz/pay/pay-ws/proc/v1", "xmlns:type" => "http://gpe.cz/pay/pay-ws/proc/v1/type") {
             xml.send("soapenv:Header")
             xml.send("soapenv:Body") {
-              xml.send("core:getOrderState") {
-                xml.send("core:orderStateRequest") {
+              xml.send("v1:getPaymentStatus") {
+                xml.send("v1:paymentStatusRequest") {
                   xml.send("type:messageId", attributes[:message_id])
-                  xml.send("type:acquirer", "0100")
+                  xml.send("type:provider", "0100")
                   xml.send("type:merchantNumber", attributes[:merchant_number])
-                  xml.send("type:orderNumber", attributes[:order_number])
+                  xml.send("type:paymentNumber", attributes[:order_number])
+                  xml.send("type:signature", attributes[:digest])
+                }
+              }
+            }
+          }
+        end.to_xml
+      end
+
+      ##
+      # <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://gpe.cz/pay/pay-ws/proc/v1" xmlns:type="http://gpe.cz/pay/pay-ws/proc/v1/type">
+      #   <soapenv:Header/>
+      #   <soapenv:Body>
+      # 		<v1:getMasterPaymentStatus>
+      # 			 <v1:masterPaymentStatusRequest>
+      # 					<type:messageId>?</type:messageId>
+      # 					<type:provider>?</type:provider>
+      # 					<type:merchantNumber>?</type:merchantNumber>
+      # 					<type:paymentNumber>?</type:paymentNumber>
+      # 					<type:signature>cid:300161986033</type:signature>
+      # 			 </v1:masterPaymentStatusRequest>
+      # 		</v1:getMasterPaymentStatus>
+      #  </soapenv:Body>
+      # </soapenv:Envelope>
+      ##
+      def get_master_payment_status(attributes = {})
+        ::Nokogiri::XML::Builder.new(:encoding => "utf-8") do |xml|
+          xml.send("soapenv:Envelope", "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/", "xmlns:v1" => "http://gpe.cz/pay/pay-ws/proc/v1", "xmlns:type" => "http://gpe.cz/pay/pay-ws/proc/v1/type") {
+            xml.send("soapenv:Header")
+            xml.send("soapenv:Body") {
+              xml.send("v1:getMasterPaymentStatus") {
+                xml.send("v1:masterPaymentStatusRequest") {
+                  xml.send("type:messageId", attributes[:message_id])
+                  xml.send("type:provider", "0100")
+                  xml.send("type:merchantNumber", attributes[:merchant_number])
+                  xml.send("type:paymentNumber", attributes[:order_number])
                   xml.send("type:signature", attributes[:digest])
                 }
               }

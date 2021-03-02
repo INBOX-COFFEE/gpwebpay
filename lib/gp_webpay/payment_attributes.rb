@@ -1,30 +1,20 @@
 module GpWebpay
   class PaymentAttributes
-    KEYS = %w(MERCHANTNUMBER OPERATION ORDERNUMBER AMOUNT CURRENCY DEPOSITFLAG URL DESCRIPTION MD USERPARAM1)
+    KEYS = %i(merchant_number operation order_number amount_in_cents currency deposit_flag redirect_url description merchant_description user_param)
 
-    WS_KEYS = %w(MESSAGEID BANKID MERCHANTNUMBER ORDERNUMBER)
+    WS_KEYS = %i(message_id bank_id merchant_number order_number)
 
-    RECCURING_KEYS = %w(MESSAGEID BANKID MERCHANTNUMBER ORDERNUMBER MASTERORDERNUMBER MERORDERNUM AMOUNT CURRENCY)
+    REGULAR_PAYMENT_KEYS = %i(
+      message_id bank_id merchant_number order_number master_order_number merchant_order_number amount_in_cents capture_flag
+      card_holder.name card_holder.email card_holder.phone_country card_holder.phone card_holder.mobile_phone_country card_holder.mobile_phone
+      address_match
+      billing.name billing.address1 billing.city billing.postal_code billing.country
+      shipping.name shipping.address1 shipping.city shipping.postal_code shipping.country
+    )
 
-    REGULAR_PAYMENT_KEYS = %w(MESSAGEID BANKID MERCHANTNUMBER ORDERNUMBER MASTERORDERNUMBER MERORDERNUM AMOUNT CURRENCY)
+    OPTIONAL_KEYS = %i(merchant_order_number description merchant_description)
 
-    OPTIONAL_KEYS = %w(MERORDERNUM DESCRIPTION MD)
-
-    MASTER_KEYS = %w(USERPARAM1)
-
-    TRANSITIONS = {
-      "MERCHANTNUMBER" => :merchant_number,
-      "ORDERNUMBER" => :order_number,
-      "MASTERORDERNUMBER" => :master_order_number,
-      "AMOUNT" => :amount_in_cents,
-      "DEPOSITFLAG" => :deposit_flag,
-      "MERORDERNUM" => :merchant_order_number,
-      "URL" => :redirect_url,
-      "MD" => :merchant_description,
-      "USERPARAM1" => :user_param,
-      "MESSAGEID" => :message_id,
-      "BANKID" => :bank_id,
-    }
+    MASTER_KEYS = %i(user_param)
 
     def initialize(payment, ws_flag = false, type = "")
       @payment = payment
@@ -35,21 +25,13 @@ module GpWebpay
     def keys
       case @payment.payment_type
       when "master"
-        if @ws_flag
-          return WS_KEYS
-        else
-          return KEYS
-        end
+        return (@ws_flag ? WS_KEYS : KEYS)
       when "recurring"
         case @type
-        when "detail", "state"
-          return WS_KEYS
-        when "recurring"
-          return RECCURING_KEYS
-        when "regular_subscription"
+        when "processRegularSubscriptionPayment"
           return REGULAR_PAYMENT_KEYS
         else
-          return WS_KEYS # TBD
+          return WS_KEYS
         end
       else
         return KEYS.reject { |k| MASTER_KEYS.include?(k) }
@@ -57,12 +39,15 @@ module GpWebpay
     end
 
     def to_h
-      keys.each_with_object({}) do |key, hash|
-        method = TRANSITIONS[key] || key.downcase.to_sym
-
-        if @payment.respond_to?(method)
-          hash[key] = @payment.public_send(method)
-        elsif !OPTIONAL_KEYS.include?(key)
+      keys.each_with_object({}) do |method, hash|
+        method_chain = method.to_s.split(".").map(&:to_sym)
+        if @payment.respond_to?(*method_chain)
+          if method == :message_id
+            hash[method] = @payment.public_send(method, @type)
+          else
+            hash[method] = method_chain.inject(@payment, :public_send)
+          end
+        elsif !OPTIONAL_KEYS.include?(method)
           method_missing(method)
         end
 

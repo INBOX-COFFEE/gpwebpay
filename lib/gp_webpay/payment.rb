@@ -11,11 +11,11 @@ module GpWebpay
     end
 
     def user_param
-      'R'
+      "R"
     end
 
     def payment_type
-      super || 'default'
+      super || "default"
     end
 
     def merchant_number
@@ -23,7 +23,7 @@ module GpWebpay
     end
 
     def operation
-      'CREATE_ORDER'
+      "CREATE_ORDER"
     end
 
     def pay_url(options = {})
@@ -34,13 +34,13 @@ module GpWebpay
 
     def success?(params)
       pay_verification.verified_response?(params) &&
-        params['PRCODE'] == '0' && params['SRCODE'] == '0'
+        params["PRCODE"] == "0" && params["SRCODE"] == "0"
     end
 
     private
 
     def pay_verification_attrs
-      %w(OPERATION ORDERNUMBER PRCODE SRCODE RESULTTEXT)
+      %i(operation order_number prcode srcode resulttext)
     end
 
     def pay_attributes

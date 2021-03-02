@@ -22,7 +22,14 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'nokogiri'
   spec.add_runtime_dependency 'curb'
 
-  spec.add_development_dependency "bundler", "~> 1.8"
+  spec.add_development_dependency "bundler", "~> 2.2"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "minitest", "~> 5.6.0"
+  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency 'simplecov', '~> 0.14'
+  spec.add_development_dependency 'vcr', '~> 3.0'
+  spec.add_development_dependency 'webmock', '~> 3.0'
+  spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'wasabi'
+  spec.add_development_dependency 'libxml-ruby'
+  spec.add_development_dependency 'timecop'
 end

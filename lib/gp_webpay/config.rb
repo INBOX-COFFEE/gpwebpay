@@ -1,4 +1,4 @@
-require 'active_support/configurable'
+require "active_support/configurable"
 
 module GpWebpay
   # Configures global settings for Kaminari
@@ -23,7 +23,7 @@ module GpWebpay
     config_accessor :merchant_password do nil; end
     config_accessor :gpe_pem_path do nil; end
     config_accessor :environment do
-      defined?(Rails) && Rails.env || 'test'
+      defined?(Rails) && Rails.env || "test"
     end
 
     def param_name
@@ -32,32 +32,32 @@ module GpWebpay
 
     def pay_url
       if production?
-        'https://3dsecure.gpwebpay.com/kb/order.do'
+        "https://3dsecure.gpwebpay.com/kb/order.do"
       else
-        'https://test.3dsecure.gpwebpay.com/kb/order.do'
+        "https://test.3dsecure.gpwebpay.com/kb/order.do"
       end
     end
 
     def web_services_url
       if production?
-        'https://3dsecure.gpwebpay.com/pay-ws/PaymentService'
+        "https://3dsecure.gpwebpay.com/pay-ws/v1/PaymentService"
       else
-        'https://test.3dsecure.gpwebpay.com/pay-ws/PaymentService'
+        "https://test.3dsecure.gpwebpay.com/pay-ws/v1/PaymentService"
       end
     end
 
     def gpe_pem_path
-      file_name = production? ? 'muzo.signing_prod.pem' : 'muzo.signing_test.pem'
+      file_name = production? ? "muzo.signing_prod.pem" : "muzo.signing_test.pem"
 
       File.expand_path("../../../certs/#{file_name}", __FILE__)
     end
 
     def production?
-      config.environment == 'production'
+      config.environment == "production"
     end
 
     # define param_name writer (copied from AS::Configurable)
-    writer, line = 'def param_name=(value); config.param_name = value; end', __LINE__
+    writer, line = "def param_name=(value); config.param_name = value; end", __LINE__
     singleton_class.class_eval writer, __FILE__, line
     class_eval writer, __FILE__, line
   end

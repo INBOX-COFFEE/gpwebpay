@@ -11,3 +11,8 @@
 .ruby-version
 
 .ruby-gemset
+
+.rspec_status
+
+/bin/test_console
+/bin/inboxcoffee.pem
