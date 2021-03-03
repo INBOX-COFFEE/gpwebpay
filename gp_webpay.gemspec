@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'gp_webpay/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "gpwebpay"
+  spec.name          = "ruby-gpwebpay"
   spec.version       = GpWebpay::VERSION
   spec.authors       = ["Andrej Antas"]
   spec.email         = ["andrej@antas.cz"]
