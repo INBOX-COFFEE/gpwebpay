@@ -43,7 +43,7 @@ module GpWebpay
     private
 
     def pay_verification_attrs
-      %i(operation order_number prcode srcode resulttext)
+      %i(OPERATION ORDERNUMBER PRCODE SRCODE RESULTTEXT)
     end
 
     def pay_attributes
