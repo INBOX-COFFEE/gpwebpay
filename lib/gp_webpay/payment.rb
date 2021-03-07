@@ -29,8 +29,8 @@ module GpWebpay
     def pay_url(options = {})
       self.redirect_url ||= options[:redirect_url]
 
-      generated_url = "#{config.pay_url}?#{pay_verification.payment_attributes_with_digest.to_param}"
       GpWebpay.logger.info "Attributes user for URL generation: #{pay_verification.payment_attributes_with_digest}"
+      generated_url = "#{config.pay_url}?#{pay_verification.payment_attributes_with_digest.to_param}"
       GpWebpay.logger.info "Produced URL: #{generated_url}"
       generated_url
     end

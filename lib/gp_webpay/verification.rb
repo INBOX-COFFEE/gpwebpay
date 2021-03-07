@@ -4,7 +4,9 @@ module GpWebpay
   class Verification
     def initialize(payment_attributes, verification_attrs = nil)
       @payment_attributes = payment_attributes
+      GpWebpay.logger.info "Payment Attrs: #{@payment_attributes}"
       @verification_attrs = verification_attrs
+      GpWebpay.logger.info "Verification Attrs: #{@verification_attrs}"
     end
 
     def verified_response?(params)
