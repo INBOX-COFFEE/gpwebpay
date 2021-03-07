@@ -13,7 +13,7 @@ module GpWebpay
     end
 
     def payment_attributes_with_digest
-      @payment_attributes.merge("DIGEST" => digest)
+      PaymentAttributes.map_to_keys(@payment_attributes).merge("DIGEST" => digest)
     end
 
     def digest

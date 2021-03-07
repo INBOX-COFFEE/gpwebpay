@@ -16,6 +16,21 @@ module GpWebpay
 
     MASTER_KEYS = %i(user_param)
 
+    TRANSITIONS = {
+      :merchant_number       => 'MERCHANTNUMBER',
+      :order_number          => 'ORDERNUMBER',
+      :master_order_number   => 'MASTERORDERNUMBER',
+      :amount_in_cents       => 'AMOUNT',
+      :deposit_flag          => 'DEPOSITFLAG',
+      :merchant_order_number => 'MERORDERNUM',
+      :redirect_url          => 'URL',
+      :merchant_description  => 'MD',
+      :message_id            => 'MESSAGEID',
+      :bank_id               => 'BANKID',
+      :currency              => 'CURRENCY',
+      :operation             => 'OPERATION'
+    }
+
     def initialize(payment, ws_flag = false, type = "")
       @payment = payment
       @ws_flag = ws_flag
@@ -52,6 +67,12 @@ module GpWebpay
         end
 
         hash
+      end
+    end
+
+    def self.map_to_keys(hash)
+      hash.each_with_object({}) do |(method, value), transformed|
+        transformed[TRANSITIONS[method]] = value
       end
     end
   end

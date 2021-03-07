@@ -27,7 +27,7 @@ module GpWebpay
     end
 
     def pay_url(options = {})
-      self.redirect_url = options[:redirect_url]
+      self.redirect_url ||= options[:redirect_url]
 
       "#{config.pay_url}?#{pay_verification.payment_attributes_with_digest.to_param}"
     end
