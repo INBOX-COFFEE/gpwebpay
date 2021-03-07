@@ -28,7 +28,8 @@ module GpWebpay
       :message_id            => 'MESSAGEID',
       :bank_id               => 'BANKID',
       :currency              => 'CURRENCY',
-      :operation             => 'OPERATION'
+      :operation             => 'OPERATION',
+      :user_param            => 'USERPARAM1',
     }
 
     def initialize(payment, ws_flag = false, type = "")
