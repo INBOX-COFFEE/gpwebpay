@@ -75,10 +75,13 @@ module GpWebpay
     end
 
     def request_attributes(type = "")
-      {
+      base_attributes = {
         message_id: message_id(type),
         merchant_number: config.merchant_number,
         order_number: order_number,
+        digest: ws_verification(type).digest,
+      }
+      payment_attributes = {
         merchant_order_number: merchant_order_number,
         master_order_number: master_order_number,
         amount: amount_in_cents,
@@ -100,10 +103,16 @@ module GpWebpay
         shipping_city: shipping.city,
         shipping_postal_code: shipping.postal_code,
         shipping_country: shipping.country,
-        digest: ws_verification(type).digest,
         # Deprecated Attrs, will remove
         currency: currency,
       }
+
+      case type
+      when "processRegularSubscriptionPayment"
+        base_attributes.merge(payment_attributes)
+      else
+        base_attributes
+      end
     end
 
     def config
