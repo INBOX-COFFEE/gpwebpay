@@ -81,34 +81,34 @@ module GpWebpay
         order_number: order_number,
         digest: ws_verification(type).digest,
       }
-      payment_attributes = {
-        merchant_order_number: merchant_order_number,
-        master_order_number: master_order_number,
-        amount: amount_in_cents,
-        capture_flag: capture_flag,
-        card_holder_name: card_holder.name,
-        card_holder_email: card_holder.email,
-        card_holder_phone_country: card_holder.phone_country,
-        card_holder_phone: card_holder.phone,
-        card_holder_mobile_phone_country: card_holder.mobile_phone_country,
-        card_holder_mobile_phone: card_holder.mobile_phone,
-        address_match: address_match,
-        billing_name: billing.name,
-        billing_address1: billing.address1,
-        billing_city: billing.city,
-        billing_postal_code: billing.postal_code,
-        billing_country: billing.country,
-        shipping_name: shipping.name,
-        shipping_address1: shipping.address1,
-        shipping_city: shipping.city,
-        shipping_postal_code: shipping.postal_code,
-        shipping_country: shipping.country,
-        # Deprecated Attrs, will remove
-        currency: currency,
-      }
 
       case type
       when "processRegularSubscriptionPayment"
+        payment_attributes = {
+          merchant_order_number: merchant_order_number,
+          master_order_number: master_order_number,
+          amount: amount_in_cents,
+          capture_flag: capture_flag,
+          card_holder_name: card_holder.name,
+          card_holder_email: card_holder.email,
+          card_holder_phone_country: card_holder.phone_country,
+          card_holder_phone: card_holder.phone,
+          card_holder_mobile_phone_country: card_holder.mobile_phone_country,
+          card_holder_mobile_phone: card_holder.mobile_phone,
+          address_match: address_match,
+          billing_name: billing.name,
+          billing_address1: billing.address1,
+          billing_city: billing.city,
+          billing_postal_code: billing.postal_code,
+          billing_country: billing.country,
+          shipping_name: shipping.name,
+          shipping_address1: shipping.address1,
+          shipping_city: shipping.city,
+          shipping_postal_code: shipping.postal_code,
+          shipping_country: shipping.country,
+          # Deprecated Attrs, will remove
+          currency: currency,
+        }
         base_attributes.merge(payment_attributes)
       else
         base_attributes

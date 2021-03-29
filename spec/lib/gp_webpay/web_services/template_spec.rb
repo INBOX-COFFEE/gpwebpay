@@ -1,7 +1,7 @@
 RSpec.describe GpWebpay::WebServices::Template do
   let(:template) { GpWebpay::WebServices::Template.new }
   let(:payment) { Payments::Default.new }
-  let(:recurring_payment) { Payments::Default.new }
+  let(:recurring_payment) { Payments::Recurring.new }
   let(:payment_attributes) { GpWebpay::PaymentAttributes.new(payment) }
 
   describe "echo" do
@@ -60,7 +60,7 @@ RSpec.describe GpWebpay::WebServices::Template do
         :order_number=>1001,
         :digest=>"ZGlnZXN0",
         :merchant_order_number=>1001,
-        :master_order_number=>1000,
+        :master_order_number=>"00100607",
         :amount=>100,
         :capture_flag=>1,
         :card_holder_name=>"Jon Doe",
@@ -92,7 +92,7 @@ RSpec.describe GpWebpay::WebServices::Template do
       allow_any_instance_of(String)
         .to receive(:sign).and_return("digest")
 
-      attrs = recurring_payment.send(:request_attributes, "getPaymentDetail")
+      attrs = payment.send(:request_attributes, "getPaymentDetail")
 
       expect(attrs).to eq({
         :digest=>"ZGlnZXN0",
@@ -110,7 +110,7 @@ RSpec.describe GpWebpay::WebServices::Template do
       allow_any_instance_of(String)
         .to receive(:sign).and_return("digest")
 
-      attrs = recurring_payment.send(:request_attributes, "getPaymentStatus")
+      attrs = payment.send(:request_attributes, "getPaymentStatus")
 
       expect(attrs).to eq({
         :digest=>"ZGlnZXN0",
@@ -128,7 +128,7 @@ RSpec.describe GpWebpay::WebServices::Template do
       allow_any_instance_of(String)
         .to receive(:sign).and_return("digest")
 
-      attrs = recurring_payment.send(:request_attributes, "getMasterPaymentStatus")
+      attrs = payment.send(:request_attributes, "getMasterPaymentStatus")
 
       expect(attrs).to eq({
         :digest=>"ZGlnZXN0",
