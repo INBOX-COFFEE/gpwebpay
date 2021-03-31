@@ -6,7 +6,7 @@ module GpWebpay
       @payment_attributes = payment_attributes
       GpWebpay.logger.info "Payment Attrs: #{@payment_attributes}"
       @verification_attrs = verification_attrs
-      GpWebpay.logger.info "Verification Attrs: #{@verification_attrs}"
+      GpWebpay.logger.info "Verification Attrs: #{@verification_attrs}" if @verification_attrs
     end
 
     def verified_response?(params)

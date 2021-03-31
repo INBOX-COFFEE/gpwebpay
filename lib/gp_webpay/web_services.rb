@@ -71,6 +71,7 @@ module GpWebpay
       hash_response = hash_response["#{first_lvl_key}"]
       second_lvl_key = hash_response.keys.last
       hash_response = hash_response["#{second_lvl_key}"]
+      GpWebpay.logger.info "Response: #{hash_response}"
       GpWebpay::WebServices::Response.new(hash_response)
     end
 
