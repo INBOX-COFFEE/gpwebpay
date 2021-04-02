@@ -9,6 +9,7 @@ module GpWebpay
     extend ActiveSupport::Concern
 
     def send_request(request_xml)
+      GpWebpay.logger.debug "WS Raw request: #{request_xml}" if GpWebpay.config.debug
       request = Curl::Easy.new(config.web_services_url)
       request.headers["Content-Type"] = "text/xml;charset=UTF-8"
       request.http_post(request_xml)
@@ -30,24 +31,28 @@ module GpWebpay
     def ws_process_regular_subscription_payment
       attributes = request_attributes("processRegularSubscriptionPayment")
       raw_response = send_request(template.process_regular_subscription_payment(attributes)).body_str
+      GpWebpay.logger.debug "WS Raw response: #{raw_response}" if GpWebpay.config.debug
       get_params_from(raw_response)
     end
 
     def ws_get_payment_detail
       attributes = request_attributes("getPaymentDetail")
       raw_response = send_request(template.get_payment_detail(attributes)).body_str
+      GpWebpay.logger.debug "WS Raw response: #{raw_response}" if GpWebpay.config.debug
       get_params_from(raw_response)
     end
 
     def ws_get_payment_status
       attributes = request_attributes("getPaymentStatus")
       raw_response = send_request(template.get_payment_status(attributes)).body_str
+      GpWebpay.logger.debug "WS Raw response: #{raw_response}" if GpWebpay.config.debug
       get_params_from(raw_response)
     end
 
     def ws_get_master_payment_status
       attributes = request_attributes("getMasterPaymentStatus")
       raw_response = send_request(template.get_master_payment_status(attributes)).body_str
+      GpWebpay.logger.debug "WS Raw response: #{raw_response}" if GpWebpay.config.debug
       get_params_from(raw_response)
     end
 

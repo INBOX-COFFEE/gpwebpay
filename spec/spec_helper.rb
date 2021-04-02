@@ -30,5 +30,6 @@ RSpec.configure do |config|
     config.merchant_number = 1234
     config.merchant_pem_path = "certs/file.pem"
     config.merchant_password = "password"
+    config.debug = true
   end
 end

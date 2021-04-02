@@ -25,6 +25,7 @@ module GpWebpay
     config_accessor :environment do
       defined?(Rails) && Rails.env || "test"
     end
+    config_accessor :debug do false; end
 
     def param_name
       config.param_name.respond_to?(:call) ? config.param_name.call : config.param_name
